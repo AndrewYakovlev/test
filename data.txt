@@ -1,0 +1,13 @@
+wb
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NJRCI6ImY3ZTY5ZWQwLWNmNWEtNDdhYy1hMWIwLTQwMDg2ZDE5MjhiNiJ9.baZpSj-jI0RsSrLowSfrv_kpxTygtLIrqFj6fj2tauE
+
+сбермегамаркет
+6079 ID
+0B90A0A3-D2A3-41FF-946C-3823207FEFAB
+56655010-BAA7-4C30-9C82-15C20251D8AE
+
+
+OZON - один из личных кабинетов
+название ключа - Andrew Yakovlev
+токен - fed92aec-9e91-44a5-a89f-7746aa5db04c
+client ID - 85472

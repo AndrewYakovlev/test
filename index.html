@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выгрузка заказов из маркетплейсов в Доставка.Гуру</title>
+    <script src="./js/vendor/vue.global.js"></script>
+    <script src="./js/vendor/element/index.full.js"></script>
+    <link rel="stylesheet" href="./styles/vendor/element/index.css" />
+    <link rel="stylesheet" href="./styles/general.css" />
+    
+</head>
+<body>
+    <div id="app">
+        <header class="header">
+            <h1>Marketplaces to Dostavka.Guru</h1>
+        </header>
+        <div id="content">
+            <el-button type="primary" @click="openChanger">
+                + Добавить площадку
+            </el-button>
+            <el-button type="primary" @click="addDg">
+                + Добавить кабинет Dostavka.Guru
+            </el-button>
+
+            <hr>
+            <el-row>
+                <el-col :span="12">
+                    <h2>Площадки</h2>
+                </el-col>
+                <el-col :span="12">
+                    <h2>Кабинеты Dostavka.Guru</h2>
+
+                    <table v-if="accounts">
+                        <tbody>
+                            <tr v-for="account in accounts">
+                                <td>{{account.id}}</td>
+                                <td>{{account.name}}</td>
+                                <td>
+                                    <el-button :icon="" type="default">Редактировать</el-button>
+                                    <el-button :icon="" type="default">Удалить</el-button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p v-else>Нет добавленных аккаунтов Dostavka.Guru</p>
+                </el-col>
+            </el-row>
+        </div>
+        <el-dialog
+            v-model="modals.changer"
+            title="Какую площадку добавляем?"
+            width="500px"
+        >
+            <div class="create-content">
+                <button class="create-btn" @click="addWb()">
+                    <img src="./images/logos/wb.png" alt="WildBerries">
+                </button>
+                <button class="create-btn" @click="addOzon()">
+                    <img src="./images/logos/ozon.png" alt="Ozon">
+                </button>
+                <button class="create-btn" @click="addYm()">
+                    <img src="./images/logos/ym.png" alt="Яндекс.Маркет">
+                </button>
+                <button class="create-btn" @click="addSber()">
+                    <img src="./images/logos/sber.png" alt="SberMegaMarket">
+                </button>
+            </div>
+        </el-dialog>
+
+        <el-dialog
+            v-model="modals.wb"
+            title="WildBerries"
+            width="500px"
+        >
+            <el-form :model="models.wb" label-width="180px" ref="wbForm" :rules="formRules.wb" status-icon>
+                <el-form-item label="Наименование (для себя)" prop="name">
+                    <el-input v-model="models.wb.name" />
+                </el-form-item>
+                <el-form-item label="Токен" prop="token">
+                    <el-input v-model="models.wb.token" />
+                </el-form-item>
+                <el-form-item label="Подставлять в № заказа">
+                    <el-input v-model="models.wb.orderPreText" />
+                </el-form-item>
+                <el-form-item label="Используется">
+                    <el-switch v-model="models.wb.active" />
+                </el-form-item>
+            
+                <el-form-item>  
+                    <el-button @click="closeModals">Отмена</el-button>
+                    <el-button type="primary" @click="createWb()">Добавить</el-button>
+                <el-form-item></el-form-item>
+        </el-form>
+        </el-dialog>
+        <el-dialog
+            v-model="modals.ozon"
+            title="Ozon"
+            width="500px"
+        >
+            <el-form :model="models.ozon" label-width="180px" ref="ozonForm" :rules="formRules.ozon" status-icon>
+                <el-form-item label="Наименование (для себя)" prop="name">
+                    <el-input v-model="models.ozon.name" />
+                </el-form-item>
+                <el-form-item label="Токен" prop="token">
+                    <el-input v-model="models.ozon.token" />
+                </el-form-item>
+                <el-form-item label="Client-ID" prop="clientId">
+                    <el-input v-model="models.ozon.clientId" />
+                </el-form-item>
+                <el-form-item label="Подставлять в № заказа">
+                    <el-input v-model="models.ozon.orderPreText" />
+                </el-form-item>
+                <el-form-item label="Используется">
+                    <el-switch v-model="models.ozon.active" />
+                </el-form-item>
+            </el-form>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="closeModals">Отмена</el-button>
+                    <el-button type="primary" @click="createOzon()">Добавить</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        <el-dialog
+            v-model="modals.sber"
+            title="SberMegaMarket"
+            width="500px"
+        >
+            <el-form :model="models.sber" label-width="180px" ref="sberForm" :rules="formRules.sber" status-icon>
+                <el-form-item label="Наименование (для себя)" prop="name">
+                    <el-input v-model="models.sber.name" />
+                </el-form-item>
+                <el-form-item label="Токен" prop="token">
+                    <el-input v-model="models.sber.token" />
+                </el-form-item>
+                <el-form-item label="ID" prop="id">
+                    <el-input v-model="models.sber.id" />
+                </el-form-item>
+                <el-form-item label="Подставлять в № заказа">
+                    <el-input v-model="models.sber.orderPreText" />
+                </el-form-item>
+                <el-form-item label="Используется">
+                    <el-switch v-model="models.sber.active" />
+                </el-form-item>
+            </el-form>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="closeModals">Отмена</el-button>
+                    <el-button type="primary" @click="createSber()">Добавить</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        <el-dialog
+            v-model="modals.ym"
+            title="Яндекс.Маркет"
+            width="500px"
+        >
+            <el-form :model="models.ym" label-width="180px" ref="ymForm" :rules="formRules.ym" status-icon>
+                <el-form-item label="Наименование (для себя)" prop="name">
+                    <el-input v-model="models.ym.name" />
+                </el-form-item>
+                <el-form-item label="Подставлять в № заказа">
+                    <el-input v-model="models.ym.orderPreText" />
+                </el-form-item>
+                <el-form-item label="Используется">
+                    <el-switch v-model="models.ym.active" />
+                </el-form-item>
+            </el-form>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="closeModals">Отмена</el-button>
+                    <el-button type="primary" @click="createYm()">Добавить</el-button>
+                </span>
+            </template>
+        </el-dialog>
+
+        <el-dialog
+            v-model="modals.dg"
+            title="Dostavka.Guru"
+            width="500px"
+        >
+            <el-form :model="models.dg" label-width="180px" ref="dgForm" :rules="formRules.dg" status-icon>
+                <el-form-item label="Наименование (для себя)" prop="name">
+                    <el-input v-model="models.dg.name" />
+                </el-form-item>
+                <el-form-item label="Токен" prop="token">
+                    <el-input v-model="models.dg.token" />
+                </el-form-item>
+                <el-form-item label="Partner ID" prop="partner_id">
+                    <el-input v-model="models.dg.partner_id" />
+                </el-form-item>
+                <el-form-item label="Используется">
+                    <el-switch v-model="models.dg.active" />
+                </el-form-item>
+            
+                <el-form-item>  
+                    <el-button @click="closeModals">Отмена</el-button>
+                    <el-button type="primary" @click="createDg()">Добавить</el-button>
+                <el-form-item></el-form-item>
+        </el-form>
+        </el-dialog>
+
+    </div>
+
+    <script src="./js/global.js"></script>
+</body>
+</html>

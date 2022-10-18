@@ -1,0 +1,38 @@
+body{
+    margin: 0;
+}
+
+.header{
+    display: block;
+    padding: 8px 15px;
+    background-color: #f7f7f7;
+}
+
+.header h1{
+    font-size: 16px;
+}
+
+#content{
+    padding: 15px;
+}
+
+.create-content{
+    text-align: center;
+}
+
+.create-btn{
+    background-color: transparent;
+    border: 1px solid #ccc;
+    text-align: center;
+    vertical-align: middle;
+    width: 200px;
+    height: 200px;
+    display: inline-block;
+    margin: 3px;
+    box-shadow: 0 0 5px 0 rgba(50,50,50,0.2);
+    cursor: pointer;
+}
+.create-btn img{
+    display: block;
+    width: 100%; 
+}
